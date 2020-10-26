@@ -1,0 +1,9 @@
+.page{
+    width: 60%; height: 100%;
+    margin-left: auto; margin-right: auto;
+    background-color:  rgba(128, 128, 128, 0.7);
+}
+.mat-tab-labels, .mat-tab-label, .mat-tab-link {
+    color: white;
+    background-color:  rgba(128, 128, 128, 0.7);
+  }

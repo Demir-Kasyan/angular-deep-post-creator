@@ -9,8 +9,10 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types"],  // "typeRoots": [] -> won't work
+    "types": ["node"] ,  
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es5",
     "module": "es2020",
     "lib": [
       "es2018",

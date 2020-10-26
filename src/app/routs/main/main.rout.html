@@ -1,0 +1,33 @@
+<div class="absolute">
+    <div class="center">
+      <mat-tab-group animationDuration="10ms" mat-align-tabs="end">
+        <mat-tab label="Перегляд">
+        <page></page>
+        </mat-tab>
+        <mat-tab *ngIf="isAdmin" label="Редактор">
+          <editor></editor>
+        </mat-tab>
+        <mat-tab style="background-color: grey;" label="Про программу">
+          <br>
+          <div style="width: 60%; margin-left: auto; margin-right: auto;">
+            Программа створенна via Angular and Electron js frameworks.<br>
+            Have a nice day! :)
+          </div>
+          <br>
+          <div>
+          <mat-form-field appearance="fill">
+              <mat-label>Пароль адміна:</mat-label>
+                <input [(ngModel)]='ispass' matInput>
+            </mat-form-field>
+          <br>
+          <div style="width: 60%; margin-left: auto; margin-right: auto;">
+              <button (click)="submit()" mat-raised-button>Перевірити</button>
+          </div>
+          </div>
+          <br>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div class="footer">
+    </div>
+</div>

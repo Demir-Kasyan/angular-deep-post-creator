@@ -1,0 +1,223 @@
+<div class="page" *ngIf="modules">
+    <mat-tab-group  [selectedIndex]="mdl"
+    (selectedIndexChange)="mdl = $event" mat-align-tabs="center">
+        <mat-tab label="-">
+        <br>
+        <div class="example-container">
+            <br>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Розділ для видалення</mat-label>
+                        <mat-select [(ngModel)]="rmmdl">
+                          <mat-option *ngFor="let module of modules;  let i = index" value="{{i}}">{{module.title}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+            <br>
+            <button (click)="removeModule()" mat-raised-button>Видалити</button>
+          </div>
+        </mat-tab>
+        <mat-tab  *ngFor="let module of modules; let mI = index" label="{{module.title}}">
+            <mat-tab-group [selectedIndex]="thm"
+            (selectedIndexChange)="thm = $event" mat-align-tabs="center">
+                <mat-tab label="-">
+                <br>
+                <div class="example-container">
+                    <br>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Розділ для видалення</mat-label>
+                        <mat-select [(ngModel)]="rmthm">
+                          <mat-option *ngFor="let theme of module.themes; let i = index" value="i">{{theme.title}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    <br>
+                    <button (click)="removeTheme()" mat-raised-button>Видалити обрану тему</button>
+                  </div>
+                </mat-tab>
+                <mat-tab *ngFor="let theme of module.themes; let tI = index" label="{{theme.title}}">
+                    <mat-tab-group [selectedIndex]="pg"
+                    (selectedIndexChange)="pg = $event"  mat-align-tabs="center">
+                         <mat-tab label="-">
+                            <br>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Розділ для видалення</mat-label>
+                                <mat-select [(ngModel)]="rmpg">
+                                  <mat-option *ngFor="let page of theme.pages; let pI = index" value="pI">{{page.title}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            <br>
+                        <div class="example-container">
+                            <br>
+                            <button (click)="removePage()" mat-raised-button>Видалити обрану сторінку</button>
+                          </div>
+                        </mat-tab>
+                        <mat-tab *ngFor="let page of theme.pages; let pI = index" label="{{page.title}}">
+                            <mat-tab-group [selectedIndex]="sbpg"
+                            (selectedIndexChange)="sbpg = $event"  mat-align-tabs="center" animationDuration="0ms">
+                                <mat-tab label="-">
+                                    <br>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Розділ для видалення</mat-label>
+                                        <mat-select [(ngModel)]="rmsbpg">
+                                          <mat-option *ngFor="let subpage of page.subpages; let i = index" value="i">{{subpage.title}}</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                    <br>
+                                <div class="example-container">
+                                    <br>
+                                    <button (click)="removeSubPage()" mat-raised-button>Видалити обрану підсторінку</button>
+                                  </div>
+                                </mat-tab>
+                                <mat-tab  *ngFor="let subpage of page.subpages; let spI = index"  label="{{subpage.title}}">
+                                    <ng-template matTabContent>
+                                    <br>
+                                    <div *ngFor="let cont of subpage.content; let i = index; ">
+                                        <br>
+                                            <div *ngIf="!cont.type">
+                                                *don't support type :(
+                                            </div>
+                                            <div *ngIf="cont.type=='text'">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Текст:</mat-label>
+        <textarea [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' matInput>{{cont.inside}}</textarea>
+                                                  </mat-form-field>
+                                            </div>
+                                            <div *ngIf="cont.type=='head'">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Заголовок:</mat-label>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
+                                                  </mat-form-field>
+                                            </div>
+                                            <div *ngIf="cont.type=='ref'">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Заголовок:</mat-label>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
+                                                  </mat-form-field>
+                                            </div>
+                                            <div *ngIf="cont.type=='img'">
+                                                <br>
+                                              <p>*переконайтеся в тому, що ваше зображення знаходится в рутовій папці assets*</p>
+                                              <br>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Имя изображения:</mat-label>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' placeholder="***.***" value="{{cont.inside}}" matInput>
+                                              </mat-form-field>
+                                            </div>
+                                            <br>
+                                            <div>
+                                                <button (click)="changeContent(i)" mat-raised-button>Змінити</button>
+                                                <button (click)="removeContent(i)" mat-raised-button>Видалити</button>
+                                            </div>
+                                        <br>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                    <br>
+                                    <div class="example-container">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Тип</mat-label>
+                                            <mat-select [(ngModel)]="typeContent">
+                                              <mat-option value="text">Текст</mat-option>
+                                              <mat-option value="img">Зображення</mat-option>
+                                              <mat-option value="head">Заголовок</mat-option>
+                                              <mat-option value="ref">Посилання</mat-option>
+                                            </mat-select> 
+                                          </mat-form-field>
+                                          <mat-divider></mat-divider>
+                                          <br>
+                                          <div *ngIf="typeContent=='text'">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Текст:</mat-label>
+                                                <textarea [(ngModel)]='newContent' matInput></textarea>
+                                              </mat-form-field>
+                                          </div>
+                                          <div *ngIf="typeContent=='img'">
+                                              <br>
+                                              <p>*переконайтеся в тому, що ваше зображення знаходится в рутовій папці assets*</p>
+                                              <br>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Имя изображения:</mat-label>
+                                                <input placeholder="***.***" [(ngModel)]='newContent' matInput>
+                                              </mat-form-field>
+                                              <!-- don't support :( -->
+                                          </div>
+                                          <div *ngIf="typeContent=='head'">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Заголовок:</mat-label>
+                                                <input [(ngModel)]='newContent' matInput>
+                                              </mat-form-field>
+                                          </div>
+                                          <!-- [(ngModel)]='changedComponents[i]'  -->
+                                          <div *ngIf="typeContent=='ref'">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Посилання:</mat-label>
+                                                <input [(ngModel)]='newContent' type="url" matInput>
+                                              </mat-form-field>
+                                          </div>
+                                        <br>
+                                        <button (click)="createContent()" mat-raised-button>Створити</button>
+                                      </div>
+                                      <br><br>
+                                    </ng-template>
+                                </mat-tab>
+                                <mat-tab label="+">
+                                    <br>
+                                    <div class="example-container">
+                                        <mat-form-field appearance="fill">
+                                          <mat-label>Назва нової підсторінки</mat-label>
+                                          <input [(ngModel)]='newSubPage' matInput>
+                                        </mat-form-field>
+                                        <br>
+                                        <button (click)="createSubPage()" mat-raised-button>Створити</button>
+                                      </div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </mat-tab>
+                        <mat-tab label="+">
+                            <br>
+                            <div class="example-container">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Назва нової сторінки</mat-label>
+                                  <input [(ngModel)]='newPage' matInput>
+                                </mat-form-field>
+                                <br>
+                                <button (click)="createPage()" mat-raised-button>Створити</button>
+                              </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </mat-tab>
+                <mat-tab label="+">
+                    <br>
+                    <div class="example-container">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Назва нової теми</mat-label>
+                          <input [(ngModel)]='newTheme' matInput>
+                        </mat-form-field>
+                        <br>
+                        <button (click)="createTheme()" mat-raised-button>Створити</button>
+                      </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="+">
+            <br>
+            <div class="example-container">
+                <mat-form-field appearance="fill">
+                  <mat-label>Назва нового розділу</mat-label>
+                  <input [(ngModel)]='newModule' matInput>
+                </mat-form-field>
+                <br>
+                <button (click)="createModule()" mat-raised-button>Створити</button>
+              </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<!-- <mat-form-field appearance="fill">
+    <mat-label>Select</mat-label>
+    <mat-select>
+      <mat-option value="option">Option</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="fill">
+    <mat-label>Textarea</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field> -->

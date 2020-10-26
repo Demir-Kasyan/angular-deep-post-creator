@@ -1,0 +1,20 @@
+.page{
+    width: 80%; height: 100%;
+    margin-left: auto; margin-right: auto;
+    background-color:  rgba(128, 128, 128, 0.7);
+}
+.mat-tab-labels, .mat-tab-label, .mat-tab-link {
+    color: white;
+    background-color:  rgba(128, 128, 128, 0.7);
+  }
+ .page::-webkit-scrollbar {
+     width: 2px;
+    background-color: transparent;
+    }
+ 
+ .page::-webkit-scrollbar-thumb {
+    background-color: #3f51b5;
+ }
+ mat-form-field{
+     width: 50%;
+ }

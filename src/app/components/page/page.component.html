@@ -1,0 +1,38 @@
+<div class="page" *ngIf="modules">
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab *ngFor="let module of modules"  label="{{module.title}}">
+            <mat-tab-group mat-align-tabs="center">
+                <mat-tab *ngFor="let theme of module.themes" label="{{theme.title}}">
+                    <mat-tab-group mat-align-tabs="center">
+                        <mat-tab *ngFor="let page of theme.pages" label="{{page.title}}">
+                            <mat-tab-group  mat-align-tabs="center" animationDuration="0ms">
+                                <mat-tab *ngFor="let subpage of page.subpages" label="{{subpage.title}}">
+                                    <div *ngFor="let cont of subpage.content">
+                                        <br>
+                                            <div *ngIf="!cont.type">
+                                                *so old version of object<br>
+                                                dont't support :(*
+                                            </div>
+                                            <div *ngIf="cont.type=='text'">
+                                                <p>{{cont.inside}}</p>
+                                            </div>
+                                            <div *ngIf="cont.type=='head'">
+                                                <h3>{{cont.inside}}</h3>
+                                            </div>
+                                            <div *ngIf="cont.type=='ref'">
+                                                <a href="{{cont.inside}}">{{cont.inside}}</a>
+                                            </div>
+                                            <div *ngIf="cont.type=='img'">
+                                                <img src="assets/{{cont.inside}}" alt=""/>
+                                            </div>
+                                        <br>
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </mat-tab>
+                    </mat-tab-group>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+    </mat-tab-group>
+</div>
