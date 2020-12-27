@@ -1,19 +1,19 @@
 .page{
     width: 80%; height: 100%;
     margin-left: auto; margin-right: auto;
-    background-color:  rgba(128, 128, 128, 0.7);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 .mat-tab-labels, .mat-tab-label, .mat-tab-link {
-    color: white;
-    background-color:  rgba(128, 128, 128, 0.7);
+    color: #000000;
+    background-color: rgba(255, 255, 255, 0.9);
   }
  .page::-webkit-scrollbar {
      width: 2px;
     background-color: transparent;
     }
- 
+
  .page::-webkit-scrollbar-thumb {
-    background-color: #3f51b5;
+    background-color: #000000;
  }
  mat-form-field{
      width: 50%;

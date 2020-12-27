@@ -25,7 +25,7 @@
                     <mat-form-field appearance="fill">
                         <mat-label>Розділ для видалення</mat-label>
                         <mat-select [(ngModel)]="rmthm">
-                          <mat-option *ngFor="let theme of module.themes; let i = index" value="i">{{theme.title}}</mat-option>
+                          <mat-option *ngFor="let theme of module.themes; let i = index" value="{{i}}">{{theme.title}}</mat-option>
                         </mat-select>
                       </mat-form-field>
                     <br>
@@ -40,7 +40,7 @@
                             <mat-form-field appearance="fill">
                                 <mat-label>Розділ для видалення</mat-label>
                                 <mat-select [(ngModel)]="rmpg">
-                                  <mat-option *ngFor="let page of theme.pages; let pI = index" value="pI">{{page.title}}</mat-option>
+                                  <mat-option *ngFor="let page of theme.pages; let pI = index" value="{{pI}}">{{page.title}}</mat-option>
                                 </mat-select>
                               </mat-form-field>
                             <br>
@@ -50,6 +50,25 @@
                           </div>
                         </mat-tab>
                         <mat-tab *ngFor="let page of theme.pages; let pI = index" label="{{page.title}}">
+                          <!--  -->
+                          <mat-tab-group [selectedIndex]="undrpg"
+                          (selectedIndexChange)="undrpg = $event"  mat-align-tabs="center">
+                               <mat-tab label="-">
+                                  <br>
+                                  <mat-form-field appearance="fill">
+                                      <mat-label>Розділ для видалення</mat-label>
+                                      <mat-select [(ngModel)]="rmundrpg">
+                                        <mat-option *ngFor="let under of page.underpages; let pkkk = index" value="{{pkk}}">{{under.title}}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  <br>
+                              <div class="example-container">
+                                  <br>
+                                  <button (click)="removeUnderPage()" mat-raised-button>Видалити обрану надсторінку</button>
+                                </div>
+                              </mat-tab>
+                              <mat-tab *ngFor="let under of page.underpages; let pkkk = index" label="{{under.title}}">
+
                             <mat-tab-group [selectedIndex]="sbpg"
                             (selectedIndexChange)="sbpg = $event"  mat-align-tabs="center" animationDuration="0ms">
                                 <mat-tab label="-">
@@ -57,7 +76,7 @@
                                     <mat-form-field appearance="fill">
                                         <mat-label>Розділ для видалення</mat-label>
                                         <mat-select [(ngModel)]="rmsbpg">
-                                          <mat-option *ngFor="let subpage of page.subpages; let i = index" value="i">{{subpage.title}}</mat-option>
+                                          <mat-option *ngFor="let subpage of under.subpages; let i = index" value="{{i}}">{{subpage.title}}</mat-option>
                                         </mat-select>
                                       </mat-form-field>
                                     <br>
@@ -66,7 +85,7 @@
                                     <button (click)="removeSubPage()" mat-raised-button>Видалити обрану підсторінку</button>
                                   </div>
                                 </mat-tab>
-                                <mat-tab  *ngFor="let subpage of page.subpages; let spI = index"  label="{{subpage.title}}">
+                                <mat-tab  *ngFor="let subpage of under.subpages; let spI = index"  label="{{subpage.title}}">
                                     <ng-template matTabContent>
                                     <br>
                                     <div *ngFor="let cont of subpage.content; let i = index; ">
@@ -77,19 +96,28 @@
                                             <div *ngIf="cont.type=='text'">
                                                 <mat-form-field appearance="fill">
                                                     <mat-label>Текст:</mat-label>
-        <textarea [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' matInput>{{cont.inside}}</textarea>
+        <textarea [(ngModel)]='this.modules[mI].themes[tI].pages[pI].underpages[pkkk].subpages[spI].content[i].inside' matInput>{{cont.inside}}</textarea>
                                                   </mat-form-field>
                                             </div>
                                             <div *ngIf="cont.type=='head'">
                                                 <mat-form-field appearance="fill">
                                                     <mat-label>Заголовок:</mat-label>
-        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].underpages[pkkk].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
                                                   </mat-form-field>
                                             </div>
                                             <div *ngIf="cont.type=='ref'">
                                                 <mat-form-field appearance="fill">
                                                     <mat-label>Заголовок:</mat-label>
-        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].underpages[pkkk].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
+                                                  </mat-form-field>
+                                            </div>
+                                            <div *ngIf="cont.type=='vid'">
+                                                <mat-form-field appearance="fill">
+                                                  <br>
+                                              <p>*переконайтеся в тому, що ваше відео знаходится в рутовій папці assets*</p>
+                                              <br>
+                                                    <mat-label>Відео:</mat-label>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].underpages[pkkk].subpages[spI].content[i].inside' value="{{cont.inside}}" matInput>
                                                   </mat-form-field>
                                             </div>
                                             <div *ngIf="cont.type=='img'">
@@ -98,7 +126,7 @@
                                               <br>
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Имя изображения:</mat-label>
-        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].subpages[spI].content[i].inside' placeholder="***.***" value="{{cont.inside}}" matInput>
+        <input [(ngModel)]='this.modules[mI].themes[tI].pages[pI].underpages[pkkk].subpages[spI].content[i].inside' placeholder="***.***" value="{{cont.inside}}" matInput>
                                               </mat-form-field>
                                             </div>
                                             <br>
@@ -118,6 +146,7 @@
                                               <mat-option value="img">Зображення</mat-option>
                                               <mat-option value="head">Заголовок</mat-option>
                                               <mat-option value="ref">Посилання</mat-option>
+                                              <mat-option value="vid">Відео</mat-option>
                                             </mat-select> 
                                           </mat-form-field>
                                           <mat-divider></mat-divider>
@@ -170,6 +199,28 @@
                                 </mat-tab>
                             </mat-tab-group>
                         </mat-tab>
+                        <!--  -->
+                        <mat-tab label="+">
+                          <br>
+                          <div class="example-container">
+                              <mat-form-field appearance="fill">
+                                <mat-label>Назва нової надсторінки</mat-label>
+                                <input [(ngModel)]='newUnderPage' matInput>
+                              </mat-form-field>
+                              <br>
+                              <button (click)="createUnderpage()" mat-raised-button>Створити</button>
+                            </div>
+                      </mat-tab>
+                  </mat-tab-group>
+              </mat-tab>
+                        <!-- <div class="example-container">
+                          <br>
+                          <button (click)="removePage()" mat-raised-button>Видалити обрану сторінку</button>
+                        </div>
+                      </mat-tab>
+                      <mat-tab *ngFor="let under of page.underpages; let pI = index" label="{{under.title}}">
+                    <mat-tab-group [selectedIndex]="sbpg"
+                    (selectedIndexChange)="sbpg = $event"  mat-align-tabs="center" animationDuration="0ms"> -->
                         <mat-tab label="+">
                             <br>
                             <div class="example-container">

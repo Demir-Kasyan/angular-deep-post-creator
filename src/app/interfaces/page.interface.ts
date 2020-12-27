@@ -1,6 +1,6 @@
-import { SubPage } from './subpage.interface';
+import { UnderPage } from './underpage.interface';
 
 export interface Page{
     title: string,
-    subpages: SubPage[]
+    underpages: UnderPage[]
 }

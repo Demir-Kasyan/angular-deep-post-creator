@@ -13,9 +13,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { EditorComponent } from './components/editor/editor.component';
 
 import { NgxElectronModule } from 'ngx-electron';
+import { LinkPipe } from './components/page/link.pipe';
 @NgModule({
   declarations: [
-    MainRout, PageComponent, EditorComponent
+    MainRout, PageComponent, EditorComponent, LinkPipe
   ],
   imports: [
     BrowserModule, FormsModule, HttpClientModule,
