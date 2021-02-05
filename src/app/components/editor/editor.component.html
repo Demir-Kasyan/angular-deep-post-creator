@@ -50,7 +50,6 @@
                           </div>
                         </mat-tab>
                         <mat-tab *ngFor="let page of theme.pages; let pI = index" label="{{page.title}}">
-                          <!--  -->
                           <mat-tab-group [selectedIndex]="undrpg"
                           (selectedIndexChange)="undrpg = $event"  mat-align-tabs="center">
                                <mat-tab label="-">
@@ -58,7 +57,7 @@
                                   <mat-form-field appearance="fill">
                                       <mat-label>Розділ для видалення</mat-label>
                                       <mat-select [(ngModel)]="rmundrpg">
-                                        <mat-option *ngFor="let under of page.underpages; let pkkk = index" value="{{pkk}}">{{under.title}}</mat-option>
+                                        <mat-option *ngFor="let under of page.underpages; let pkkk = index" value="{{pkkk}}">{{under.title}}</mat-option>
                                       </mat-select>
                                     </mat-form-field>
                                   <br>
@@ -68,7 +67,6 @@
                                 </div>
                               </mat-tab>
                               <mat-tab *ngFor="let under of page.underpages; let pkkk = index" label="{{under.title}}">
-
                             <mat-tab-group [selectedIndex]="sbpg"
                             (selectedIndexChange)="sbpg = $event"  mat-align-tabs="center" animationDuration="0ms">
                                 <mat-tab label="-">
@@ -131,7 +129,7 @@
                                             </div>
                                             <br>
                                             <div>
-                                                <button (click)="changeContent(i)" mat-raised-button>Змінити</button>
+                                                <button (click)="changeContent()" mat-raised-button>Змінити</button>
                                                 <button (click)="removeContent(i)" mat-raised-button>Видалити</button>
                                             </div>
                                         <br>
@@ -147,7 +145,8 @@
                                               <mat-option value="head">Заголовок</mat-option>
                                               <mat-option value="ref">Посилання</mat-option>
                                               <mat-option value="vid">Відео</mat-option>
-                                            </mat-select> 
+                                              <mat-option value="test">Тест</mat-option>
+                                            </mat-select>
                                           </mat-form-field>
                                           <mat-divider></mat-divider>
                                           <br>
@@ -165,7 +164,6 @@
                                                 <mat-label>Имя изображения:</mat-label>
                                                 <input placeholder="***.***" [(ngModel)]='newContent' matInput>
                                               </mat-form-field>
-                                              <!-- don't support :( -->
                                           </div>
                                           <div *ngIf="typeContent=='head'">
                                             <mat-form-field appearance="fill">
@@ -173,12 +171,44 @@
                                                 <input [(ngModel)]='newContent' matInput>
                                               </mat-form-field>
                                           </div>
-                                          <!-- [(ngModel)]='changedComponents[i]'  -->
                                           <div *ngIf="typeContent=='ref'">
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Посилання:</mat-label>
                                                 <input [(ngModel)]='newContent' type="url" matInput>
                                               </mat-form-field>
+                                          </div>
+                                          <div *ngIf="typeContent=='test'">
+                                            <mat-divider></mat-divider>
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>Запитання:</mat-label>
+                                              <input [(ngModel)]='newTestContent.qw' type="text" matInput>
+                                            </mat-form-field><br>
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>Варінт відповіді 'А':</mat-label>
+                                              <input [(ngModel)]='newTestContent.answA' type="url" matInput>
+                                            </mat-form-field><br>
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>Варінт відповіді 'Б':</mat-label>
+                                              <input [(ngModel)]='newTestContent.answB' type="url" matInput>
+                                            </mat-form-field><br>
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>Варінт відповіді 'В':</mat-label>
+                                              <input [(ngModel)]='newTestContent.answV' type="url" matInput>
+                                            </mat-form-field><br>
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>Варінт відповіді 'Г':</mat-label>
+                                              <input [(ngModel)]='newTestContent.answG' type="url" matInput>
+                                            </mat-form-field><br>
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>Правильна відповідь:</mat-label>
+                                              <mat-select [(ngModel)]="newTestContent.rightAnswer">
+                                                <mat-option value="A">{{newTestContent.answA}}</mat-option>
+                                                <mat-option value="B">{{newTestContent.answB}}</mat-option>
+                                                <mat-option value="V">{{newTestContent.answV}}</mat-option>
+                                                <mat-option value="G">{{newTestContent.answG}}</mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                            <mat-divider></mat-divider>
                                           </div>
                                         <br>
                                         <button (click)="createContent()" mat-raised-button>Створити</button>
@@ -199,7 +229,6 @@
                                 </mat-tab>
                             </mat-tab-group>
                         </mat-tab>
-                        <!--  -->
                         <mat-tab label="+">
                           <br>
                           <div class="example-container">
@@ -213,14 +242,6 @@
                       </mat-tab>
                   </mat-tab-group>
               </mat-tab>
-                        <!-- <div class="example-container">
-                          <br>
-                          <button (click)="removePage()" mat-raised-button>Видалити обрану сторінку</button>
-                        </div>
-                      </mat-tab>
-                      <mat-tab *ngFor="let under of page.underpages; let pI = index" label="{{under.title}}">
-                    <mat-tab-group [selectedIndex]="sbpg"
-                    (selectedIndexChange)="sbpg = $event"  mat-align-tabs="center" animationDuration="0ms"> -->
                         <mat-tab label="+">
                             <br>
                             <div class="example-container">
@@ -260,15 +281,3 @@
         </mat-tab>
     </mat-tab-group>
 </div>
-
-<!-- <mat-form-field appearance="fill">
-    <mat-label>Select</mat-label>
-    <mat-select>
-      <mat-option value="option">Option</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br>
-  <mat-form-field appearance="fill">
-    <mat-label>Textarea</mat-label>
-    <textarea matInput></textarea>
-  </mat-form-field> -->

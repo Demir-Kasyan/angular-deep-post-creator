@@ -32,12 +32,34 @@
                                                 <video controls width="250">
                                                     <source src="{{__dirname}}/app/src/assets/{{cont.inside}}"
                                                             type="video/mp4">
-                                                
+
                                                     <source src="assets/{{cont.inside}}"
                                                             type="video/mp4">
-                                                
                                                     Sorry, your browser doesn't support embedded videos.
                                                 </video>
+                                            </div>
+                                            <div *ngIf="cont.type=='test'">
+                                              <h3>{{cont.inside.qw}}</h3>
+                                              <mat-radio-group
+                                                [disabled]="cont.inside.clientAnswer!==undefined"
+                                                [(ngModel)]="cont.inside.clientAnswer">
+                                                <mat-radio-button [value]="'A'">
+                                                  {{cont.inside.answA}}
+                                                </mat-radio-button><br>
+                                                <mat-radio-button [value]="'B'">
+                                                  {{cont.inside.answB}}
+                                                </mat-radio-button><br>
+                                                <mat-radio-button [value]="'V'">
+                                                  {{cont.inside.answV}}
+                                                </mat-radio-button><br>
+                                                <mat-radio-button [value]="'G'">
+                                                  {{cont.inside.answG}}
+                                                </mat-radio-button>
+                                              </mat-radio-group>
+                                              <h3 *ngIf="cont.inside.clientAnswer!==undefined">
+                                                {{cont.inside.clientAnswer===cont.inside.rightAnswer?
+                                                'ВІРНА ВІДПОВІДЬ!':'НЕ ВІРНА ВІДПОВІДЬ!'}}
+                                              </h3>
                                             </div>
                                         <br>
                                     </div>

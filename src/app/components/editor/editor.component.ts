@@ -9,6 +9,7 @@ import { SubPage } from 'src/app/interfaces/subpage.interface';
 import { Content } from 'src/app/interfaces/content.interface';
 import { FileSystemService } from '../services/filesysystem.service';
 import { UnderPage } from 'src/app/interfaces/underpage.interface';
+import {Test} from '../../interfaces/test.interface';
 
 @Component({
   selector: 'editor',
@@ -18,12 +19,12 @@ import { UnderPage } from 'src/app/interfaces/underpage.interface';
 })
 export class EditorComponent implements OnInit {
   __dirname: string;
-  mdl: number; 
+  mdl: number;
   thm: number;
   pg: number;
   undrpg: number;
   sbpg: number;
-  rmmdl: number; 
+  rmmdl: number;
   rmthm: number;
   rmpg: number;
   rmundrpg: number;
@@ -35,14 +36,22 @@ export class EditorComponent implements OnInit {
   newPage: string;
   newUnderPage: string;
   newSubPage: string;
-  newContent: any;
+  newContent: string;
+  newTestContent: Test = {
+    qw: '',
+    answA: '',
+    answB: '',
+    answV: '',
+    answG: '',
+    rightAnswer: ''
+  };
   typeContent: string;
   changedComponents: any[];
   constructor(){}
   ngOnInit(): void {
-   FileSystemService.modules.subscribe(value=>{
+   FileSystemService.modules.subscribe(value => {
       this.modules = value;
-      
+
    });
    __dirname = FileSystemService.__dirname;
   }
@@ -65,7 +74,7 @@ export class EditorComponent implements OnInit {
     FileSystemService.saveModules();
   }
   createTheme(){
-    this.modules[this.mdl-1].themes.push(
+    this.modules[this.mdl - 1].themes.push(
       {
         title: this.newTheme,
         pages: []
@@ -138,8 +147,8 @@ export class EditorComponent implements OnInit {
     this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages[this.sbpg-1].content.push(
       {
         type: this.typeContent,
-        inside: this.newContent
-      } as Content
+        inside: this.typeContent !== 'test' ? this.newContent : this.newTestContent
+      } as unknown as Content
     );
     FileSystemService.modules.next(this.modules);
     FileSystemService.saveModules();
@@ -150,10 +159,9 @@ export class EditorComponent implements OnInit {
     FileSystemService.modules.next(this.modules);
         FileSystemService.saveModules();
   }
+
   changeContent(){
     FileSystemService.modules.next(this.modules);
     FileSystemService.saveModules();
   }
-  
-
 }
