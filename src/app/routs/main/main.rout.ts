@@ -1,28 +1,47 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
-import { AdminService } from 'src/app/components/services/admin.service';
-import { FileSystemService } from 'src/app/components/services/filesysystem.service';
+import {Component, OnInit} from '@angular/core';
+import {FileSystemService} from 'src/app/components/services/filesysystem.service';
+import {MatDialog} from '@angular/material/dialog';
+import {LoginComponent} from '../../components/dialogs/login/login.component';
+import {DiaryComponent} from '../../components/dialogs/diary/diary.component';
+import {LibComponent} from '../../components/dialogs/lib/lib.component';
+import {AccountService} from "../../components/services/account.service";
+import {DiaryService} from "../../components/services/diary.service";
 
 @Component({
   selector: 'main-rout',
   templateUrl: './main.rout.html',
   styleUrls: ['./main.rout.css'],
-  providers: [HttpClient,ElectronService, FileSystemService]
 })
 export class MainRout implements OnInit {
-  ispass: string;
-  isAdmin: boolean;
-  constructor(private http: HttpClient, private _electronService: ElectronService){
-    FileSystemService.init(new FileSystemService(http,_electronService));
-    AdminService.admin.subscribe(value=>{
-      this.isAdmin = value;
-    })
-  }
-  ngOnInit(): void {
 
+  constructor(public dialog: MatDialog, public fs: FileSystemService, public ass: AccountService, private ds: DiaryService) {
+    fs.init();
   }
-  submit(){
-    AdminService.isAdmin(this.ispass);
+
+  ngOnInit(): void {
+    const dialogRef = this.dialog.open(LoginComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        this.ngOnInit();
+      }
+      else {
+        this.ds.buildDiary();
+      }
+    });
+  }
+  logOut(): void{
+    this.ass.logOut();
+    this.ngOnInit();
+  }
+  getDiary(): void {
+    this.dialog.open(DiaryComponent, {
+      width: '50%'
+    });
+  }
+
+  getLib(): void {
+    this.dialog.open(LibComponent, {
+      width: '50%'
+    });
   }
 }

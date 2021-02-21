@@ -1,76 +1,120 @@
 <div class="page" *ngIf="modules">
-    <mat-tab-group mat-align-tabs="center">
-        <mat-tab *ngFor="let module of modules"  label="{{module.title}}">
-            <mat-tab-group mat-align-tabs="center">
-                <mat-tab *ngFor="let theme of module.themes" label="{{theme.title}}">
-                    <mat-tab-group mat-align-tabs="center">
-                        <mat-tab *ngFor="let page of theme.pages" label="{{page.title}}">
-                            <mat-tab-group  mat-align-tabs="center" animationDuration="0ms">
-                                <mat-tab *ngFor="let under of page.underpages" label="{{under.title}}">
-                                    <mat-tab-group  mat-align-tabs="center" animationDuration="0ms">
-                                <mat-tab *ngFor="let subpage of under.subpages" label="{{subpage.title}}">
-                                    <div *ngFor="let cont of subpage.content">
-                                        <br>
-                                            <div *ngIf="!cont.type">
-                                                *so old version of object<br>
-                                                dont't support :(*
-                                            </div>
-                                            <div *ngIf="cont.type=='text'" >
-                                                <p [innerHTML]="cont.inside | link"></p>
-                                            </div>
-                                            <div *ngIf="cont.type=='head'">
-                                                <h3>{{cont.inside}}</h3>
-                                            </div>
-                                            <div *ngIf="cont.type=='ref'">
-                                                <a href="{{cont.inside}}">{{cont.inside}}</a>
-                                            </div>
-                                            <div *ngIf="cont.type=='img'">
-                                                <img src="{{__dirname}}/app/src/assets/{{cont.inside}}" alt=""/>
-                                                <img src="assets/{{cont.inside}}" alt=""/>
-                                            </div>
-                                            <div *ngIf="cont.type=='vid'">
-                                                <video controls width="250">
-                                                    <source src="{{__dirname}}/app/src/assets/{{cont.inside}}"
-                                                            type="video/mp4">
+  <mat-tab-group mat-align-tabs="center">
+    <mat-tab  *ngFor="let module of modules;  let mI = index"
+             label="{{module.title}}" >
+      <div [id]="module.title">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab *ngFor="let theme of module.themes" [disabled]="isRead(theme, module)"  label="{{theme.title}}">
+          <div [id]="theme.title">
+            <mat-tab-group mat-align-tabs="center" [className]="theme.title">
+              <mat-tab *ngFor="let page of theme.pages" label="{{page.title}}">
+                <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+                  <mat-tab *ngFor="let under of page.underpages" label="{{under.title}}">
+                    <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+                      <mat-tab *ngFor="let subpage of under.subpages; let subIndex = index" label="{{subpage.title}}">
+                        <div *ngFor="let cont of subpage.content">
+                          <br>
+                          <div *ngIf="!cont.type">
+                            *so old version of object<br>
+                            don't support :(*
+                          </div>
+                          <div *ngIf="cont.type=='text'">
+                            <p [innerHTML]="cont.inside | link"></p>
+                          </div>
+                          <div *ngIf="cont.type=='head'">
+                            <h3>{{cont.inside}}</h3>
+                          </div>
+                          <div *ngIf="cont.type=='ref'">
+                            <a href="{{cont.inside}}">{{cont.inside}}</a>
+                          </div>
+                          <div *ngIf="cont.type=='img'">
+                            <img src="{{path}}/app/src/assets/{{cont.inside}}" alt=""/>
+                            <img src="assets/{{cont.inside}}" alt=""/>
+                          </div>
+                          <div *ngIf="cont.type=='vid'">
+                            <video controls width="250">
+                              <source src="{{path}}/app/src/assets/{{cont.inside}}"
+                                      type="video/mp4">
 
-                                                    <source src="assets/{{cont.inside}}"
-                                                            type="video/mp4">
-                                                    Sorry, your browser doesn't support embedded videos.
-                                                </video>
-                                            </div>
-                                            <div *ngIf="cont.type=='test'">
-                                              <h3>{{cont.inside.qw}}</h3>
-                                              <mat-radio-group
-                                                [disabled]="cont.inside.clientAnswer!==undefined"
-                                                [(ngModel)]="cont.inside.clientAnswer">
-                                                <mat-radio-button [value]="'A'">
-                                                  {{cont.inside.answA}}
-                                                </mat-radio-button><br>
-                                                <mat-radio-button [value]="'B'">
-                                                  {{cont.inside.answB}}
-                                                </mat-radio-button><br>
-                                                <mat-radio-button [value]="'V'">
-                                                  {{cont.inside.answV}}
-                                                </mat-radio-button><br>
-                                                <mat-radio-button [value]="'G'">
-                                                  {{cont.inside.answG}}
-                                                </mat-radio-button>
-                                              </mat-radio-group>
-                                              <h3 *ngIf="cont.inside.clientAnswer!==undefined">
-                                                {{cont.inside.clientAnswer===cont.inside.rightAnswer?
-                                                'ВІРНА ВІДПОВІДЬ!':'НЕ ВІРНА ВІДПОВІДЬ!'}}
-                                              </h3>
-                                            </div>
-                                        <br>
-                                    </div>
-                                </mat-tab>
-                            </mat-tab-group>
-                                </mat-tab>
-                            </mat-tab-group>
-                        </mat-tab>
+                              <source src="assets/{{cont.inside}}"
+                                      type="video/mp4">
+                              Sorry, your browser doesn't support embedded videos.
+                            </video>
+                          </div>
+                          <div *ngIf="cont.type=='divide'">
+                            <mat-divider></mat-divider>
+                          </div>
+                          <div *ngIf="(cont.type=='test' && !subpage.isTestPage)">
+                            <h3>{{cont.inside.qw}}</h3>
+                            <mat-radio-group
+                              [disabled]="cont.inside.clientAnswer!==undefined"
+                              [(ngModel)]="cont.inside.clientAnswer">
+                              <mat-radio-button [value]="'A'">
+                                {{cont.inside.answA}}
+                              </mat-radio-button>
+                              <br>
+                              <mat-radio-button [value]="'B'">
+                                {{cont.inside.answB}}
+                              </mat-radio-button>
+                              <br>
+                              <mat-radio-button [value]="'V'">
+                                {{cont.inside.answV}}
+                              </mat-radio-button>
+                              <br>
+                              <mat-radio-button [value]="'G'">
+                                {{cont.inside.answG}}
+                              </mat-radio-button>
+                            </mat-radio-group>
+                            <h3 *ngIf="cont.inside.clientAnswer!==undefined">
+                              {{cont.inside.clientAnswer === cont.inside.rightAnswer ?
+                              'ВІРНА ВІДПОВІДЬ!' : 'НЕ ВІРНА ВІДПОВІДЬ!'}}
+                            </h3>
+                          </div>
+                          <div *ngIf="(cont.type=='test' && subpage.isTestPage)">
+                            <h3>{{cont.inside.qw}}</h3>
+                            <mat-radio-group
+                              [disabled]="(subpage.result !== undefined && subpage.re_results !== undefined)"
+                              [(ngModel)]="cont.inside.clientAnswer">
+                              <mat-radio-button [ngStyle]="{'color':
+                            (cont.inside.rightAnswer == 'A') && (cont.inside.clientAnswer === cont.inside.rightAnswer) ? 'green' : 'grey'}"
+                                                [value]="'A'">
+                                {{cont.inside.answA}}
+                              </mat-radio-button>
+                              <br>
+                              <mat-radio-button [ngStyle]="{'color':
+                            (cont.inside.rightAnswer == 'B') && (cont.inside.clientAnswer === cont.inside.rightAnswer) ? 'green' : 'grey'}"
+                                                [value]="'B'">
+                                {{cont.inside.answB}}
+                              </mat-radio-button>
+                              <br>
+                              <mat-radio-button [ngStyle]="{'color':
+                            (cont.inside.rightAnswer == 'V') && (cont.inside.clientAnswer === cont.inside.rightAnswer) ? 'green' : 'grey'}"
+                                                [value]="'V'">
+                                {{cont.inside.answV}}
+                              </mat-radio-button>
+                              <br>
+                              <mat-radio-button [ngStyle]="{'color':
+                            (cont.inside.rightAnswer == 'G') && (cont.inside.clientAnswer === cont.inside.rightAnswer) ? 'green' : 'grey'}"
+                                                [value]="'G'">
+                                {{cont.inside.answG}}
+                              </mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                          <br>
+                        </div>
+                        <button *ngIf="subpage.isTestPage" [disabled]="(subpage.result !== undefined && subpage.re_results !== undefined)" mat-button (click)="getTestResult(subpage, module, theme)">
+                          Перевірити
+                        </button>
+                      </mat-tab>
                     </mat-tab-group>
-                </mat-tab>
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-tab>
             </mat-tab-group>
+          </div>
         </mat-tab>
-    </mat-tab-group>
+      </mat-tab-group>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>

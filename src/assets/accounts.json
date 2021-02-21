@@ -1,0 +1,9 @@
+[{
+  "id": "0",
+  "username": "Петро Олексійович",
+  "password": "password",
+  "diary": {
+    "id": "0",
+    "courses": []
+  }
+}]

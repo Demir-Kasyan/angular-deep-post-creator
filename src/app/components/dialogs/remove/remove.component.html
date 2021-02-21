@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Ввійти в акаунт</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Користувач</mat-label>
+      <mat-select [(ngModel)]="idAccount" name="account">
+        <mat-option *ngFor="let acc of acs.getAccounts()" [value]="acc.id">{{acc.username}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-label>Пароль</mat-label>
+      <input matInput required
+             [formControl]="passwordFormControl" [type]="'password'">
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Пароль є <strong>обов'язковим</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="acs.remove(idAccount,passwordFormControl.value)" cdkFocusInitial>Ввійти</button>
+</mat-dialog-actions>

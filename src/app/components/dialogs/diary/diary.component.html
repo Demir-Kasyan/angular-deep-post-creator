@@ -1,0 +1,22 @@
+<table class="mat-table">
+  <tr class="mat-header-row">
+    <th class="mat-header-cell">Курс</th>
+    <th class="mat-header-cell">Розділ</th>
+    <th class="mat-header-cell">Бали</th>
+    <th class="mat-header-cell">Оцінка</th>
+    <th class="mat-header-cell">Перездача(Бали)</th>
+    <th class="mat-header-cell">Перездача(Оцінка)</th>
+  </tr>
+  <ng-container *ngFor="let c of ass.getActiveAccount().diary?.courses">
+    <tr class="mat-row">
+      <td [rowSpan]="c.chapters.length+1" class="mat-cell">{{c.name}}</td>
+    </tr>
+    <tr class="mat-row" *ngFor="let chp of c.chapters">
+      <td class="mat-cell">{{chp.name}}</td>
+      <td class="mat-cell">{{chp.points}}</td>
+      <td class="mat-cell">{{chp.result}}</td>
+      <td class="mat-cell">{{chp.re_points}}</td>
+      <td class="mat-cell">{{chp.re_result}}</td>
+    </tr>
+  </ng-container>
+</table>

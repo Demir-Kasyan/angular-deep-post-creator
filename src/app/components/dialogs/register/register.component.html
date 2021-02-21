@@ -1,0 +1,26 @@
+  <h2 mat-dialog-title>Додати аккаунт</h2>
+  <mat-dialog-content class="mat-typography">
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Юзернейм</mat-label>
+        <input matInput required
+               [formControl]="usernameFormControl" [type]="'text'">
+        <mat-error *ngIf="usernameFormControl.hasError('required')">
+          Username є <strong>обов'язковим</strong>
+        </mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Пароль</mat-label>
+        <input matInput required
+               [formControl]="passwordFormControl" [type]="'password'">
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Пароль є <strong>обов'язковим</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="createAccount()" mat-dialog-close cdkFocusInitial>Створити</button>
+  </mat-dialog-actions>
+

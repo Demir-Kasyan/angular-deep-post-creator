@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Ввійти в акаунт</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Користувач</mat-label>
+      <mat-select [(ngModel)]="idAccount" name="account">
+        <mat-option (click)="remove()">Видалити користувача</mat-option>
+        <mat-option *ngFor="let acc of ass.getAccounts()" [value]="acc.id">{{acc.username}}</mat-option>
+        <mat-option (click)="register()">Додати користувача</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-label>Пароль</mat-label>
+      <input (keyup.enter)="dialogRef.close(ass.logIn(passwordFormControl.value,idAccount))" matInput required
+             [formControl]="passwordFormControl" [type]="'password'">
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Пароль є <strong>обов'язковим</strong>
+      </mat-error>
+      <mat-error *ngIf="(idAccount && ass.getAccounts()[idAccount]?.password !== passwordFormControl?.value)">
+        Пароль не <strong>співпадає</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="ass.logIn(passwordFormControl.value,idAccount)" cdkFocusInitial>Ввійти</button>
+</mat-dialog-actions>

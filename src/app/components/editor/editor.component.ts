@@ -1,14 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { Module } from 'src/app/interfaces/module.interface';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnInit} from '@angular/core';
+import {Module} from 'src/app/interfaces/module.interface';
 
-import { ElectronService } from 'ngx-electron';
-import { Theme } from 'src/app/interfaces/theme.interface';
-import { Page } from 'src/app/interfaces/page.interface';
-import { SubPage } from 'src/app/interfaces/subpage.interface';
-import { Content } from 'src/app/interfaces/content.interface';
-import { FileSystemService } from '../services/filesysystem.service';
-import { UnderPage } from 'src/app/interfaces/underpage.interface';
+import {Theme} from 'src/app/interfaces/theme.interface';
+import {Page} from 'src/app/interfaces/page.interface';
+import {SubPage} from 'src/app/interfaces/subpage.interface';
+import {Content} from 'src/app/interfaces/content.interface';
+import {FileSystemService} from '../services/filesysystem.service';
+import {UnderPage} from 'src/app/interfaces/underpage.interface';
 import {Test} from '../../interfaces/test.interface';
 
 @Component({
@@ -17,8 +16,8 @@ import {Test} from '../../interfaces/test.interface';
   styleUrls: ['./editor.component.css'],
   providers: [HttpClient]
 })
-export class EditorComponent implements OnInit {
-  __dirname: string;
+export class EditorComponent {
+  path: string;
   mdl: number;
   thm: number;
   pg: number;
@@ -33,6 +32,7 @@ export class EditorComponent implements OnInit {
   modules: Module[];
   fs: any;
   newTheme: string;
+  newPageTest: boolean;
   newPage: string;
   newUnderPage: string;
   newSubPage: string;
@@ -47,121 +47,145 @@ export class EditorComponent implements OnInit {
   };
   typeContent: string;
   changedComponents: any[];
-  constructor(){}
-  ngOnInit(): void {
-   FileSystemService.modules.subscribe(value => {
-      this.modules = value;
+  newPageTestPoint: number;
+  newModuleCourse: boolean;
 
-   });
-   __dirname = FileSystemService.__dirname;
+  constructor(private fss: FileSystemService) {
+    fss.modules.subscribe(value => {
+      this.modules = value;
+    });
+    this.path = fss.path;
   }
-  changeComps(comps: any){
+
+  changeComps(comps: any): void {
     this.changedComponents = comps;
   }
-  createModule(){
+
+  createModule(): void {
     this.modules.push(
       {
         title: this.newModule,
-        themes: []
+        themes: [],
+        isRead: false,
+        isCourse: this.newModuleCourse
       } as Module
     );
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
   }
-  removeModule(){
-    this.modules = this.modules.filter((x,y)=>this.rmmdl!=y);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
+
+  removeModule(): void {
+    this.modules = this.modules.filter((x, y) => this.rmmdl != y);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
   }
-  createTheme(){
+
+  createTheme(): void {
     this.modules[this.mdl - 1].themes.push(
       {
         title: this.newTheme,
-        pages: []
+        pages: [],
+        isRead: false
       } as Theme
     );
-    console.log(this.modules);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
 
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
+  removeTheme(): void {
+    this.modules[this.mdl - 1].themes =
+      this.modules[this.mdl - 1].themes.filter((x, y) => this.rmthm != y);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
   }
-  removeTheme(){
-    this.modules[this.mdl-1].themes = this.modules[this.mdl-1].themes.filter((x,y)=>this.rmthm!=y);
-    console.log(this.rmthm);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  createPage(){
-    this.modules[this.mdl-1].themes[this.thm-1].pages.push(
+
+  createPage(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages.push(
       {
         title: this.newPage,
         underpages: []
       } as Page
     );
-    console.log(this.modules);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  removePage(){
-    this.modules[this.mdl-1].themes[this.thm-1].pages = this.modules[this.mdl-1].themes[this.thm-1].pages.filter((x,y)=>this.rmpg!=y);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  createUnderpage(){
-    this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages.push(
-      {
-        title: this.newUnderPage,
-        subpages: []
-      } as UnderPage
-    );
-    console.log(this.modules);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  removeUnderPage(){
-    console.log(this.modules);
-    console.log(this.rmundrpg);
-    this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages = this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages.filter((x,y)=>this.rmundrpg!=y);
-    console.log(this.modules);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  createSubPage(){
-    this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages.push(
-      {
-        title: this.newSubPage,
-        number: this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages.length+1,
-        content: []
-      } as SubPage
-    );
-    console.log(this.modules);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  removeSubPage(){
-    this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages = this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages.filter((x,y)=>this.rmsbpg!=y);
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  createContent(){
-    this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages[this.sbpg-1].content.push(
-      {
-        type: this.typeContent,
-        inside: this.typeContent !== 'test' ? this.newContent : this.newTestContent
-      } as unknown as Content
-    );
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
-  }
-  removeContent(rm: number){
-    this.modules[this.mdl-1].themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages[this.sbpg-1].content = this.modules[this.mdl-1].
-        themes[this.thm-1].pages[this.pg-1].underpages[this.undrpg-1].subpages[this.sbpg-1].content.filter((x,y)=>rm!=y);
-    FileSystemService.modules.next(this.modules);
-        FileSystemService.saveModules();
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
   }
 
-  changeContent(){
-    FileSystemService.modules.next(this.modules);
-    FileSystemService.saveModules();
+  removePage(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages =
+      this.modules[this.mdl - 1].themes[this.thm - 1].pages.filter((x, y) => this.rmpg != y);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  createUnderpage(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages.push(
+      {
+        title: this.newUnderPage,
+        subpages: [],
+        isRead: false
+      } as UnderPage
+    );
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  removeUnderPage(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages =
+      this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages.filter((x, y) => this.rmundrpg != y);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  createSubPage(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages.push(
+      {
+        title: this.newSubPage,
+        number: this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages.length + 1,
+        content: [],
+        isTestPage: this.newPageTest,
+        pointForTest: this.newPageTestPoint
+      } as SubPage
+    );
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  removeSubPage(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages =
+      this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages.filter((x, y) => this.rmsbpg != y);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  createContent(): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages[this.sbpg - 1].content.push(
+      {
+        type: this.typeContent,
+        inside: this.typeContent !== 'test' ? this.newContent : this.newTestContent,
+        isRead: false
+      } as unknown as Content
+    );
+    this.newTestContent = {
+      qw: '',
+      answA: '',
+      answB: '',
+      answV: '',
+      answG: '',
+      rightAnswer: ''
+    };
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  removeContent(rm: number): void {
+    this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages[this.sbpg - 1].content =
+      this.modules[this.mdl - 1].themes[this.thm - 1].pages[this.pg - 1].underpages[this.undrpg - 1].subpages[this.sbpg - 1].content.filter((x, y) => rm != y);
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
+  }
+
+  changeContent(): void {
+    this.fss.modules.next(this.modules);
+    this.fss.saveModules();
   }
 }
